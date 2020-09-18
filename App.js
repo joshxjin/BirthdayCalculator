@@ -6,7 +6,8 @@ import {
   View,
   StatusBar,
   Platform,
-  Button,
+  Modal,
+  TouchableHighlight,
 } from "react-native";
 import XDate from "xdate";
 import { Calendar } from "react-native-calendars";
@@ -34,9 +35,12 @@ class App extends Component {
     this.state = {
       endDate: new XDate.today(),
       selectedDate: null,
+      showMonthsPicker: false,
     };
+    this.renderHeader = this.renderHeader.bind(this);
     this.onBirthdayChange = this.onBirthdayChange.bind(this);
     this.onEndDateChange = this.onEndDateChange.bind(this);
+    this.onHideModal = this.onHideModal.bind(this);
   }
 
   renderHeader(date) {
@@ -46,7 +50,7 @@ class App extends Component {
     return (
       <Text
         style={{ fontWeight: "bold" }}
-        onPress={() => console.log("on press header")}
+        onPress={() => this.setState({ showMonthsPicker: true })}
       >
         {month} {year}
       </Text>
@@ -82,8 +86,14 @@ class App extends Component {
     return years + " years, " + months + " months, " + days + " days";
   }
 
+  onHideModal() {
+    this.setState({
+      showMonthsPicker: !this.state.showMonthsPicker,
+    });
+  }
+
   render() {
-    const { endDate, selectedDate } = this.state;
+    const { endDate, selectedDate, showMonthsPicker } = this.state;
     const birthday = selectedDate ? selectedDate : endDate;
     const age = this.calcAge(birthday, endDate);
 
@@ -146,6 +156,134 @@ class App extends Component {
 
           <Text>Age: {age}</Text>
         </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showMonthsPicker}
+          onRequestClose={this.onHideModal}
+        >
+          <View style={modalStyles.centeredView}>
+            <View style={modalStyles.modalView}>
+              <View style={modalStyles.modalMonthsRow}>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Jan</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Feb</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Mar</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={modalStyles.modalMonthsRow}>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Apr</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>May</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Jun</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={modalStyles.modalMonthsRow}>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Jul</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Aug</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Sep</Text>
+                </TouchableHighlight>
+              </View>
+              <View style={modalStyles.modalMonthsRow}>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Oct</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Nov</Text>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  style={{
+                    ...modalStyles.openButton,
+                    backgroundColor: "#2196F3",
+                  }}
+                  onPress={this.onHideModal}
+                >
+                  <Text style={modalStyles.textStyle}>Dec</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     );
   }
@@ -170,9 +308,46 @@ const styles = StyleSheet.create({
   },
 });
 
-const calendarStyles = StyleSheet.create({
-  calendar: {
-    margin: 50,
+const modalStyles = StyleSheet.create({
+  centeredView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin: 10,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  modalMonthsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

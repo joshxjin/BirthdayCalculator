@@ -95,7 +95,7 @@ class App extends Component {
   render() {
     const { endDate, selectedDate, showMonthsPicker } = this.state;
     const birthday = selectedDate ? selectedDate : endDate;
-    const age = this.calcAge(birthday, endDate);
+    const age = this.calcAge(birthday.clone(), endDate.clone());
 
     const markedSelectedDate = birthday.toString("yyyy-MM-dd");
     const markedEndDate = endDate.toString("yyyy-MM-dd");

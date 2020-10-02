@@ -12,7 +12,7 @@ import {
 import XDate from "xdate";
 import { Calendar } from "react-native-calendars";
 
-const monthsList = [
+const monthsListLong = [
   "January",
   "February",
   "March",
@@ -27,12 +27,29 @@ const monthsList = [
   "December",
 ];
 
+const monthsListShort = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 const Separator = () => <SafeAreaView style={styles.separator} />;
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentDate: new Date(),
+      current: null,
       endDate: new XDate.today(),
       selectedDate: null,
       showMonthsPicker: false,
@@ -41,10 +58,11 @@ class App extends Component {
     this.onBirthdayChange = this.onBirthdayChange.bind(this);
     this.onEndDateChange = this.onEndDateChange.bind(this);
     this.onHideModal = this.onHideModal.bind(this);
+    this.onMonthSelected = this.onMonthSelected.bind(this);
   }
 
   renderHeader(date) {
-    const month = monthsList[date.getMonth()];
+    const month = monthsListLong[date.getMonth()];
     const year = date.getFullYear();
 
     return (
@@ -92,8 +110,24 @@ class App extends Component {
     });
   }
 
+  onMonthSelected(month) {
+    this.state.currentDate.setMonth(month);
+    this.setState({
+      current: this.state.currentDate.toString(),
+      showMonthsPicker: !this.state.showMonthsPicker,
+    });
+    console.log("Month selected: " + this.state.currentDate.toString());
+    this.forceUpdate();
+  }
+
   render() {
-    const { endDate, selectedDate, showMonthsPicker } = this.state;
+    const {
+      currentDate,
+      current,
+      endDate,
+      selectedDate,
+      showMonthsPicker,
+    } = this.state;
     const birthday = selectedDate ? selectedDate : endDate;
     const age = this.calcAge(birthday.clone(), endDate.clone());
 
@@ -108,6 +142,9 @@ class App extends Component {
       selected: true,
       selectedColor: "lightblue",
     };
+
+    const currentDisplayDate = current ? current : currentDate.toString();
+
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Birthday Calculator</Text>
@@ -120,7 +157,7 @@ class App extends Component {
           <Calendar
             markedDates={markedDates}
             // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-            maxDate={XDate.today()}
+            // maxDate={XDate.today()}
             // Handler which gets executed on day press. Default = undefined
             onDayPress={this.onBirthdayChange}
             // Handler which gets executed on day long press. Default = undefined
@@ -134,23 +171,24 @@ class App extends Component {
             // Show week numbers to the left. Default = false
             showWeekNumbers={true}
             // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-            disableAllTouchEventsForDisabledDays={true}
+            // disableAllTouchEventsForDisabledDays={true}
             // Replace default month and year title with custom one. the function receive a date as parameter.
             renderHeader={this.renderHeader}
             // Enable the option to swipe between months. Default = false
             enableSwipeMonths={true}
+            current={currentDisplayDate}
           />
           <Separator />
         </View>
 
         <View style={{ marginLeft: 5 }}>
           <Text>
-            Birtday: {birthday.getDate()} {monthsList[birthday.getMonth()]}{" "}
+            Birtday: {birthday.getDate()} {monthsListLong[birthday.getMonth()]}{" "}
             {birthday.getFullYear()}
           </Text>
 
           <Text>
-            End Date: {endDate.getDate()} {monthsList[endDate.getMonth()]}{" "}
+            End Date: {endDate.getDate()} {monthsListLong[endDate.getMonth()]}{" "}
             {endDate.getFullYear()}
           </Text>
 
@@ -171,7 +209,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(0)}
                 >
                   <Text style={modalStyles.textStyle}>Jan</Text>
                 </TouchableHighlight>
@@ -180,7 +218,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(1)}
                 >
                   <Text style={modalStyles.textStyle}>Feb</Text>
                 </TouchableHighlight>
@@ -189,7 +227,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(2)}
                 >
                   <Text style={modalStyles.textStyle}>Mar</Text>
                 </TouchableHighlight>
@@ -200,7 +238,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(3)}
                 >
                   <Text style={modalStyles.textStyle}>Apr</Text>
                 </TouchableHighlight>
@@ -209,7 +247,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(4)}
                 >
                   <Text style={modalStyles.textStyle}>May</Text>
                 </TouchableHighlight>
@@ -218,7 +256,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(5)}
                 >
                   <Text style={modalStyles.textStyle}>Jun</Text>
                 </TouchableHighlight>
@@ -229,7 +267,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(6)}
                 >
                   <Text style={modalStyles.textStyle}>Jul</Text>
                 </TouchableHighlight>
@@ -238,7 +276,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(7)}
                 >
                   <Text style={modalStyles.textStyle}>Aug</Text>
                 </TouchableHighlight>
@@ -247,7 +285,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(8)}
                 >
                   <Text style={modalStyles.textStyle}>Sep</Text>
                 </TouchableHighlight>
@@ -258,7 +296,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(9)}
                 >
                   <Text style={modalStyles.textStyle}>Oct</Text>
                 </TouchableHighlight>
@@ -267,7 +305,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(10)}
                 >
                   <Text style={modalStyles.textStyle}>Nov</Text>
                 </TouchableHighlight>
@@ -276,7 +314,7 @@ class App extends Component {
                     ...modalStyles.openButton,
                     backgroundColor: "#2196F3",
                   }}
-                  onPress={this.onHideModal}
+                  onPress={() => this.onMonthSelected(11)}
                 >
                   <Text style={modalStyles.textStyle}>Dec</Text>
                 </TouchableHighlight>
